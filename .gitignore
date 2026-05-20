@@ -2,5 +2,7 @@ node_modules/
 dist/
 .superpowers/
 .playwright-mcp/
+.claude/
+docs/superpowers/
 .DS_Store
 *.log
