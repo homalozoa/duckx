@@ -1,0 +1,37 @@
+{
+  "records": [
+    {
+      "id": "73c8257d-973f-458c-b66e-8071a80e654c",
+      "weight": 132,
+      "date": "2026-05-18",
+      "time": "00:47",
+      "mood": "sick",
+      "note": "",
+      "photo": "",
+      "createdAt": "2026-05-20T16:48:10.382Z",
+      "updatedAt": "2026-05-20T16:48:10.382Z"
+    },
+    {
+      "id": "74f2963e-7244-41e1-b788-65af2ff6cacd",
+      "weight": 160,
+      "date": "2026-05-19",
+      "time": "00:48",
+      "mood": "happy",
+      "note": "感觉吃多了",
+      "photo": "",
+      "createdAt": "2026-05-20T16:48:36.319Z",
+      "updatedAt": "2026-05-20T16:48:36.319Z"
+    },
+    {
+      "id": "fc7900fd-b9b5-48f8-b5c0-ad08d42f1bd1",
+      "weight": 153,
+      "date": "2026-05-20",
+      "time": "00:48",
+      "mood": "sleepy",
+      "note": "脚疼睡不着",
+      "photo": "",
+      "createdAt": "2026-05-20T16:49:02.701Z",
+      "updatedAt": "2026-05-20T16:49:02.701Z"
+    }
+  ]
+}
