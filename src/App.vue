@@ -12,6 +12,7 @@ const moodOptions = [
 const records = ref([]);
 const error = ref('');
 const editingId = ref(null);
+const adminPassword = ref('');
 const form = reactive({
   weight: '',
   date: new Date().toISOString().slice(0, 10),
@@ -81,9 +82,9 @@ async function submitForm() {
 
   try {
     if (editingId.value) {
-      await updateRecord(editingId.value, payload);
+      await updateRecord(editingId.value, payload, adminPassword.value);
     } else {
-      await createRecord(payload);
+      await createRecord(payload, adminPassword.value);
     }
     resetForm();
     await loadRecords();
@@ -105,7 +106,7 @@ function editRecord(record) {
 async function removeRecord(record) {
   error.value = '';
   try {
-    await deleteRecord(record.id);
+    await deleteRecord(record.id, adminPassword.value);
     await loadRecords();
   } catch (err) {
     error.value = err.message;
@@ -168,6 +169,10 @@ onMounted(loadRecords);
       <section class="content-grid">
         <form class="panel record-form" @submit.prevent="submitForm">
           <div class="panel-title">✦ {{ editingId ? '编辑记录' : '记录体重' }} ✦</div>
+          <label>
+            管理密码
+            <input v-model="adminPassword" type="password" autocomplete="current-password" placeholder="添加、修改、删除时需要" />
+          </label>
           <label>
             体重 (g)
             <input v-model="form.weight" type="number" min="1" required placeholder="例如 320" />

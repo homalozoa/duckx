@@ -20,3 +20,5 @@ This repository contains a Vue 3 single-page frontend and an Express.js backend.
 The backend lives in `server/`. `server/index.js` defines the Express app and REST routes. `server/storage.js` owns all reads and writes to `data/data.json`; frontend code should not read or write the JSON file directly.
 
 Weights are stored and displayed in grams because DouX is a young duck. Keep the UI responsive: mobile uses a single-column touch-friendly layout, while desktop uses a wider dashboard layout.
+
+Set `DUCKX_ADMIN_PASSWORD` in the server environment to require the `X-Admin-Password` header for create, update, and delete routes. Do not commit real admin passwords.

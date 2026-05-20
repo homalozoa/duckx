@@ -37,6 +37,58 @@ describe('records API', () => {
     expect(list.body.records).toHaveLength(1);
   });
 
+  it('requires admin password when configured for creating records', async () => {
+    const protectedApp = createApp(join(dir, 'protected-data.json'), { adminPassword: 'secret' });
+
+    await request(protectedApp)
+      .post('/api/records')
+      .send({ weight: 320, date: '2026-05-20', time: '14:30', mood: 'happy' })
+      .expect(401, { error: '管理密码不正确' });
+
+    await request(protectedApp)
+      .post('/api/records')
+      .set('X-Admin-Password', 'wrong')
+      .send({ weight: 320, date: '2026-05-20', time: '14:30', mood: 'happy' })
+      .expect(401, { error: '管理密码不正确' });
+
+    await request(protectedApp)
+      .post('/api/records')
+      .set('X-Admin-Password', 'secret')
+      .send({ weight: 320, date: '2026-05-20', time: '14:30', mood: 'happy' })
+      .expect(201);
+  });
+
+  it('requires admin password when configured for updating and deleting records', async () => {
+    const protectedApp = createApp(join(dir, 'protected-data.json'), { adminPassword: 'secret' });
+    const created = await request(protectedApp)
+      .post('/api/records')
+      .set('X-Admin-Password', 'secret')
+      .send({ weight: 320, date: '2026-05-20', time: '14:30', mood: 'happy', note: '', photo: '' })
+      .expect(201);
+
+    const id = created.body.record.id;
+
+    await request(protectedApp)
+      .put(`/api/records/${id}`)
+      .send({ weight: 335 })
+      .expect(401, { error: '管理密码不正确' });
+
+    await request(protectedApp)
+      .put(`/api/records/${id}`)
+      .set('X-Admin-Password', 'secret')
+      .send({ weight: 335 })
+      .expect(200);
+
+    await request(protectedApp)
+      .delete(`/api/records/${id}`)
+      .expect(401, { error: '管理密码不正确' });
+
+    await request(protectedApp)
+      .delete(`/api/records/${id}`)
+      .set('X-Admin-Password', 'secret')
+      .expect(204);
+  });
+
   it('rejects invalid weight', async () => {
     const response = await request(app)
       .post('/api/records')

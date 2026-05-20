@@ -43,3 +43,7 @@ npm start
 ## Data
 
 Records are stored in `data/data.json`. Weight values are stored and displayed in grams.
+
+## Admin writes
+
+Set `DUCKX_ADMIN_PASSWORD` in the server environment to protect record creation, updates, and deletion. Read-only endpoints remain public.

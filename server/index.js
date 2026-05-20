@@ -47,9 +47,19 @@ function pickRecordFields(input) {
   return output;
 }
 
-export function createApp(dataFile = defaultDataFile) {
+export function createApp(dataFile = defaultDataFile, options = {}) {
   const app = express();
   const storage = createStorage(dataFile);
+  const adminPassword = options.adminPassword ?? process.env.DUCKX_ADMIN_PASSWORD ?? '';
+
+  function requireAdmin(req, res) {
+    if (!adminPassword || req.get('X-Admin-Password') === adminPassword) {
+      return true;
+    }
+
+    res.status(401).json({ error: '管理密码不正确' });
+    return false;
+  }
 
   app.use(express.json({ limit: '2mb' }));
 
@@ -63,6 +73,10 @@ export function createApp(dataFile = defaultDataFile) {
 
   app.post('/api/records', async (req, res, next) => {
     try {
+      if (!requireAdmin(req, res)) {
+        return;
+      }
+
       const error = validateRecord(req.body);
       if (error) {
         res.status(400).json({ error });
@@ -78,6 +92,10 @@ export function createApp(dataFile = defaultDataFile) {
 
   app.put('/api/records/:id', async (req, res, next) => {
     try {
+      if (!requireAdmin(req, res)) {
+        return;
+      }
+
       const error = validateRecord(req.body, true);
       if (error) {
         res.status(400).json({ error });
@@ -98,6 +116,10 @@ export function createApp(dataFile = defaultDataFile) {
 
   app.delete('/api/records/:id', async (req, res, next) => {
     try {
+      if (!requireAdmin(req, res)) {
+        return;
+      }
+
       const deleted = await storage.deleteRecord(req.params.id);
       if (!deleted) {
         res.status(404).json({ error: '记录不存在' });

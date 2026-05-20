@@ -1,3 +1,7 @@
+function adminHeaders(adminPassword) {
+  return adminPassword ? { 'X-Admin-Password': adminPassword } : {};
+}
+
 async function requestJson(url, options = {}) {
   const response = await fetch(url, {
     headers: { 'Content-Type': 'application/json', ...options.headers },
@@ -21,22 +25,27 @@ export async function fetchRecords() {
   return data.records;
 }
 
-export async function createRecord(record) {
+export async function createRecord(record, adminPassword) {
   const data = await requestJson('/api/records', {
     method: 'POST',
+    headers: adminHeaders(adminPassword),
     body: JSON.stringify(record)
   });
   return data.record;
 }
 
-export async function updateRecord(id, record) {
+export async function updateRecord(id, record, adminPassword) {
   const data = await requestJson(`/api/records/${id}`, {
     method: 'PUT',
+    headers: adminHeaders(adminPassword),
     body: JSON.stringify(record)
   });
   return data.record;
 }
 
-export async function deleteRecord(id) {
-  await requestJson(`/api/records/${id}`, { method: 'DELETE' });
+export async function deleteRecord(id, adminPassword) {
+  await requestJson(`/api/records/${id}`, {
+    method: 'DELETE',
+    headers: adminHeaders(adminPassword)
+  });
 }
