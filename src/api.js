@@ -4,8 +4,8 @@ function adminHeaders(adminPassword) {
 
 async function requestJson(url, options = {}) {
   const response = await fetch(url, {
-    headers: { 'Content-Type': 'application/json', ...options.headers },
-    ...options
+    ...options,
+    headers: { 'Content-Type': 'application/json', ...options.headers }
   });
 
   if (!response.ok) {
